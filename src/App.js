@@ -7,7 +7,8 @@ const API_KEY = '21389146-cca5561c436f6f4cadcc8ecb1';
 
 class App extends React.Component {
   state = {
-    images: []
+    images: [],
+    error: null
   }
 
   handleGetRequest = async e => {
@@ -16,18 +17,27 @@ class App extends React.Component {
     const url = `https://pixabay.com/api/?key=${API_KEY}&q=${searchTerm}&image_type=photo&pretty=true`;
     const request = await fetch(url);
     const response = await request.json();
-    this.setState({
-      images: response.hits,
-    })
-    console.log(searchTerm);
-    console.log(this.state.images);
+    if (!searchTerm) {
+      this.setState({
+        error: "Please provide a value."
+      })
+    } else {
+      this.setState({
+        images: response.hits,
+        error: null
+      })
+    }
   }
 
   render() {
     return (
       <div>
         <ImageSearch handleGetRequest={this.handleGetRequest} />
-        <ImageList images={this.state.images} />
+        {
+          this.state.error !== null ? 
+          <div style={{color: "#fff", textAlign: "center"}}>{ this.state.error }</div> :
+          <ImageList images={this.state.images} />
+        }
       </div>
     )
   }

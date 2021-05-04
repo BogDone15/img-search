@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import './ImageList.css';
 
@@ -7,14 +8,19 @@ const ImageList = (props) => {
  return (
   <div className="container">
    <div className="row">
-   { props.images.map(({ id, largeImageURL, tags }) => {
+   { props.images.map((image) => {
     return (
-     <div key={id} className="col-md-4" style={{ marginBottom: '2rem' }}>
+     <div key={image.id} className="col-md-4" style={{ marginBottom: '2rem' }}>
       <div className="imageList__container">
-      <img className="imageList__image" src={largeImageURL} alt={tags} />
+      <img className="imageList__image" src={image.largeImageURL} alt={image.tags} />
       </div>
       <div className="image__details">
-      <button>View</button>
+      <Link to={{
+       pathname: `/image/${image.id}`,
+       state: { image }
+      }}>
+       <button>View</button>
+      </Link>
       </div>
      </div>
     )
